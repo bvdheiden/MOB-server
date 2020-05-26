@@ -1,4 +1,4 @@
 rootProject.name = 'MOB-server'
 include 'sdk'
-//include 'server'
+include 'server'
 
