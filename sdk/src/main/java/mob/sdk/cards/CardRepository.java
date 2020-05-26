@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 public class CardRepository {
     private ArrayList<Card> cards;
@@ -23,8 +24,9 @@ public class CardRepository {
     }
 
     public void addCards(Card... cards) {
-        if (!Arrays.asList(cards).contains(null))
-            this.cards.addAll(Arrays.asList(cards));
+        List<Card> list = Arrays.asList(cards);
+        if (!list.contains(null))
+            this.cards.addAll(list);
     }
 
     public void initCards() {
@@ -37,6 +39,15 @@ public class CardRepository {
         for (Card card1 : cards) {
             if (card1.equals(card)) {
                 return card1;
+            }
+        }
+        return null;
+    }
+
+    public Card getCard(CardIdentifier identifier) {
+        for (Card card : cards) {
+            if (card.getIdentifier() == identifier) {
+                return card;
             }
         }
         return null;
