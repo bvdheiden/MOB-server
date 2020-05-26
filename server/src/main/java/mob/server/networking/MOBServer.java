@@ -1,5 +1,6 @@
 package mob.server.networking;
 
+import mob.sdk.networking.LoggingCallback;
 import mob.sdk.networking.SocketClient;
 
 import java.io.IOException;
@@ -9,15 +10,31 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MOBServer {
+public class MOBServer implements LoggingCallback {
     private final AtomicBoolean connecting = new AtomicBoolean(false);
+    private final AtomicBoolean mqttConnected = new AtomicBoolean(false);
     private final List<SocketClient> socketClientList = new CopyOnWriteArrayList<>();
+    private final MQTTClient mqttClient;
     private ServerSocket serverSocket;
+
+    public MOBServer(MQTTClient mqttClient) {
+        this.mqttClient = mqttClient;
+
+        mqttClient.addConnectionListener(() -> {
+            mqttConnected.set(true);
+        });
+
+        mqttClient.addDisconnectionListener(() -> {
+            mqttConnected.set(false);
+        });
+    }
 
     /**
      * Start the server socket and start listening for clients.
      */
     public void start(int port) {
+        SocketClient.addLoggingCallback(this);
+
         if (isRunning()) {
             return;
         }
@@ -76,5 +93,15 @@ public class MOBServer {
 
     public boolean isRunning() {
         return connecting.get() || (serverSocket != null && !serverSocket.isClosed());
+    }
+
+    @Override
+    public void print(String string) {
+        System.out.println(string);
+    }
+
+    @Override
+    public void printf(String string, Object... params) {
+        System.out.printf(string + "%n", params);
     }
 }

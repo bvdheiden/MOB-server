@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SocketClient {
+    private static LoggingCallback loggingCallback;
+
     private final Socket socket;
     private final ObjectOutputStream out;
     private final ObjectInputStream in;
@@ -85,10 +87,18 @@ public class SocketClient {
     }
 
     public static void print(String string) {
-        System.out.println("Network > " + string);
+        if (loggingCallback != null) {
+            loggingCallback.print("Network > " + string);
+        }
     }
 
     public static void printf(String string, Object... parameters) {
-        System.out.printf("Network > " + string + "%n", parameters);
+        if (loggingCallback != null) {
+            loggingCallback.printf("Network > " + string, parameters);
+        }
+    }
+
+    public static void addLoggingCallback(LoggingCallback callback) {
+        loggingCallback = callback;
     }
 }
