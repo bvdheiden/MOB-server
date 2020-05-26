@@ -7,35 +7,24 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 public class CardRepository {
-    private ArrayList<Card> cards;
+    private static ArrayList<Card> cards;
     private static final int PARFOES = 0;
 
     public CardRepository() {
-        this.cards = new ArrayList<>();
+        cards = new ArrayList<>();
     }
 
     public ArrayList<Card> getCards() {
         return cards;
     }
 
-    public void addCard(Card card) {
-        if (card != null && this.cards != null)
-            this.cards.add(card);
+    public static void initCards() {
+        cards.add(new Card(CardType.BOW, CardIdentifier.PARFOES));
+        cards.add(new Card(CardType.SWORD,CardIdentifier.KEVIN));
+        cards.add(new Card(CardType.SHIELD,CardIdentifier.BARRY));
     }
 
-    public void addCards(Card... cards) {
-        List<Card> list = Arrays.asList(cards);
-        if (!list.contains(null))
-            this.cards.addAll(list);
-    }
-
-    public void initCards() {
-        this.cards.add(new Card(CardType.BOW, CardIdentifier.PARFOES));
-        this.cards.add(new Card(CardType.SWORD,CardIdentifier.KEVIN));
-        this.cards.add(new Card(CardType.SHIELD,CardIdentifier.BARRY));
-    }
-
-    public Card get(Card card) {
+    public static Card get(Card card) {
         for (Card card1 : cards) {
             if (card1.equals(card)) {
                 return card1;
@@ -44,7 +33,7 @@ public class CardRepository {
         return null;
     }
 
-    public Card getCard(CardIdentifier identifier) {
+    public static Card getCard(CardIdentifier identifier) {
         for (Card card : cards) {
             if (card.getIdentifier() == identifier) {
                 return card;
