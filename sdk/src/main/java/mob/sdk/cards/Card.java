@@ -4,15 +4,11 @@ import java.io.Serializable;
 
 public class Card implements Serializable {
     private CardType cardType;
-    private String title;
-    private String fact;
-    private int androidImageResource;
+    private CardIdentifier identifier;
 
-    public Card(CardType cardType, String title, String fact, int androidImageResource) {
-        this.title = title;
+    public Card(CardType cardType,CardIdentifier cardIdentifier) {
         this.cardType = cardType;
-        this.fact = fact;
-        this.androidImageResource = androidImageResource;
+        this.identifier = identifier;
     }
 
     /**
@@ -67,27 +63,11 @@ public class Card implements Serializable {
         this.cardType = cardType;
     }
 
-    public String getTitle() {
-        return title;
+    public CardIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getFact() {
-        return fact;
-    }
-
-    public void setFact(String fact) {
-        this.fact = fact;
-    }
-
-    public int getAndroidImageResource() {
-        return androidImageResource;
-    }
-
-    public void setAndroidImageResource(int androidImageResource) {
-        this.androidImageResource = androidImageResource;
+    public void setIdentifier(CardIdentifier identifier) {
+        this.identifier = identifier;
     }
 }
