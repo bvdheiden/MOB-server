@@ -4,6 +4,8 @@ allprojects {
     }
 }
 
+group = 'mob'
+
 subprojects {
     version = '1.0'
 }
