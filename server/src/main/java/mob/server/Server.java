@@ -2,6 +2,7 @@ package mob.server;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,6 +40,7 @@ public class Server extends Application {
         });
 
         VBox serverLayout = new VBox(serverLabel, serverStartButton);
+        serverLayout.setPadding(new Insets(20));
 
         Label mqttBrokerLabel = new Label("Broker: ");
         TextField mqttBrokerField = new TextField();
@@ -89,8 +91,11 @@ public class Server extends Application {
         });
 
         VBox mqttLayout = new VBox(mqttClientLabel, mqttForm, mqttClientStartButton);
+        mqttLayout.setPadding(new Insets(20));
 
-        primaryStage.setScene(new Scene(new VBox(serverLayout, mqttLayout)));
+        VBox mainLayout = new VBox(serverLayout, mqttLayout);
+
+        primaryStage.setScene(new Scene(mainLayout));
         primaryStage.setTitle("Server");
         primaryStage.show();
     }
