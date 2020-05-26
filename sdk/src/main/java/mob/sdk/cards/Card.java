@@ -9,7 +9,7 @@ public class Card implements Serializable {
 
     public Card(CardType cardType, CardIdentifier cardIdentifier) {
         this.cardType = cardType;
-        this.identifier = identifier;
+        this.identifier = cardIdentifier;
     }
 
     /**
