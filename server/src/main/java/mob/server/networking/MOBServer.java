@@ -12,8 +12,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MOBServer implements LoggingCallback {
     private final AtomicBoolean connecting = new AtomicBoolean(false);
+    private final AtomicBoolean mqttConnected = new AtomicBoolean(false);
     private final List<SocketClient> socketClientList = new CopyOnWriteArrayList<>();
+    private final MQTTClient mqttClient;
     private ServerSocket serverSocket;
+
+    public MOBServer(MQTTClient mqttClient) {
+        this.mqttClient = mqttClient;
+
+        mqttClient.addConnectionListener(() -> {
+            mqttConnected.set(true);
+        });
+
+        mqttClient.addDisconnectionListener(() -> {
+            mqttConnected.set(false);
+        });
+    }
 
     /**
      * Start the server socket and start listening for clients.
@@ -77,6 +91,9 @@ public class MOBServer implements LoggingCallback {
         }
     }
 
+    public boolean isRunning() {
+        return connecting.get() || (serverSocket != null && !serverSocket.isClosed());
+    }
 
     @Override
     public void print(String string) {
@@ -86,9 +103,5 @@ public class MOBServer implements LoggingCallback {
     @Override
     public void printf(String string, Object... params) {
         System.out.printf(string + "%n", params);
-    }
-
-    public boolean isRunning() {
-        return connecting.get() || (serverSocket != null && !serverSocket.isClosed());
     }
 }
