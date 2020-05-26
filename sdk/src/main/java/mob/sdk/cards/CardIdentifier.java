@@ -5,6 +5,7 @@ public enum  CardIdentifier {
     KEVIN,      //knecht
     BARRY,      //barbaar
     AVANIUS     //koning
+    //TODO add more cards
 
 
 }
