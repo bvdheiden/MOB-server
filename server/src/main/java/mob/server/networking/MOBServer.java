@@ -1,5 +1,6 @@
 package mob.server.networking;
 
+import mob.sdk.networking.LoggingCallback;
 import mob.sdk.networking.SocketClient;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MOBServer {
+public class MOBServer implements LoggingCallback {
     private final AtomicBoolean connecting = new AtomicBoolean(false);
     private final List<SocketClient> socketClientList = new CopyOnWriteArrayList<>();
     private ServerSocket serverSocket;
@@ -18,6 +19,8 @@ public class MOBServer {
      * Start the server socket and start listening for clients.
      */
     public void start(int port) {
+        SocketClient.addLoggingCallback(this);
+
         if (isRunning()) {
             return;
         }
@@ -72,6 +75,17 @@ public class MOBServer {
         } catch (IOException exception) {
             SocketClient.print("Failed to close server socket.");
         }
+    }
+
+
+    @Override
+    public void print(String string) {
+        System.out.println(string);
+    }
+
+    @Override
+    public void printf(String string, Object... params) {
+        System.out.printf(string + "%n", params);
     }
 
     public boolean isRunning() {
