@@ -14,7 +14,6 @@ public class MOBServer {
     private final List<SocketClient> socketClientList = new CopyOnWriteArrayList<>();
     private ServerSocket serverSocket;
 
-
     /**
      * Start the server socket and start listening for clients.
      */
