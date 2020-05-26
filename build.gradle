@@ -3,7 +3,3 @@ allprojects {
         jcenter()
     }
 }
-
-subprojects {
-    version = '1.0'
-}
