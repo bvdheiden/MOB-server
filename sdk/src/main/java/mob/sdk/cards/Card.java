@@ -1,6 +1,7 @@
 package mob.sdk.cards;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Card implements Serializable {
     private CardType cardType;
@@ -69,5 +70,19 @@ public class Card implements Serializable {
 
     public void setIdentifier(CardIdentifier identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Card)) return false;
+        Card card = (Card) o;
+        return getCardType() == card.getCardType() &&
+                getIdentifier() == card.getIdentifier();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCardType(), getIdentifier());
     }
 }
