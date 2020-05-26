@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GameServer {
-    private static final int SERVER_PORT = 10_000;
-
+public class MOBServer {
     private final AtomicBoolean connecting = new AtomicBoolean(false);
     private final List<SocketClient> socketClientList = new CopyOnWriteArrayList<>();
     private ServerSocket serverSocket;
@@ -20,7 +18,7 @@ public class GameServer {
     /**
      * Start the server socket and start listening for clients.
      */
-    public void start() {
+    public void start(int port) {
         if (isRunning()) {
             return;
         }
@@ -30,7 +28,7 @@ public class GameServer {
         new Thread(() -> {
             try {
                 SocketClient.print("Creating server socket.");
-                this.serverSocket = new ServerSocket(SERVER_PORT);
+                this.serverSocket = new ServerSocket(port);
                 while (connecting.get()) {
                     try {
                         SocketClient.print("Waiting for clients.");
