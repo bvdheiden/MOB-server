@@ -22,6 +22,7 @@ public class CardRepository {
         cards.add(new Card(CardType.BOW, CardIdentifier.PARFOES));
         cards.add(new Card(CardType.SWORD,CardIdentifier.KEVIN));
         cards.add(new Card(CardType.SHIELD,CardIdentifier.BARRY));
+        //TODO add more cards
     }
 
     public static Card get(Card card) {

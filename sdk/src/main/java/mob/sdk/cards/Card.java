@@ -7,13 +7,14 @@ public class Card implements Serializable {
     private CardType cardType;
     private CardIdentifier identifier;
 
-    public Card(CardType cardType,CardIdentifier cardIdentifier) {
+    public Card(CardType cardType, CardIdentifier cardIdentifier) {
         this.cardType = cardType;
         this.identifier = identifier;
     }
 
     /**
      * attacks the other player's card
+     *
      * @param other the other player's card
      * @return 0 if it was a draw, 1 if you won and -1 if you lost
      */
@@ -26,7 +27,7 @@ public class Card implements Serializable {
                 }
 
                 switch (this.cardType) {
-                    case BOW -> {
+                    case BOW: {
                         if (other.getCardType() == CardType.SWORD) {
                             return -1;
                         } else if (other.getCardType() == CardType.SHIELD) {
@@ -34,21 +35,25 @@ public class Card implements Serializable {
                         }
 
                     }
-                    case SWORD -> {
+                    break;
+                    case SWORD: {
                         if (other.getCardType() == CardType.BOW) {
                             return 1;
                         } else if (other.getCardType() == CardType.SHIELD) {
                             return -1;
                         }
                     }
-                    case SHIELD -> {
+                    break;
+                    case SHIELD: {
                         if (other.getCardType() == CardType.BOW) {
                             return -1;
                         } else if (other.getCardType() == CardType.SWORD) {
                             return 1;
                         }
                     }
-                    default -> res = 0;
+                    break;
+                    default:
+                        res = 0;
                 }
             }
         }
