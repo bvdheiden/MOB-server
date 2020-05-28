@@ -9,11 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BattleDevice extends Device {
-    private AbortListener abortListener;
-    private FinishListener finishListener;
-
     private final AtomicBoolean isPlaying = new AtomicBoolean(false);
     private final Map<BattleRequest.Color, SocketClient> clientMap = new ConcurrentHashMap<>();
+
+    private AbortListener abortListener;
+    private FinishListener finishListener;
 
     public BattleDevice(String id, MQTTClient mqttClient) {
         super(id, mqttClient);
@@ -50,6 +50,7 @@ public class BattleDevice extends Device {
     }
 
     public void reset() {
+        isPlaying.set(false);
         clientMap.clear();
         abortListener = null;
         finishListener = null;
