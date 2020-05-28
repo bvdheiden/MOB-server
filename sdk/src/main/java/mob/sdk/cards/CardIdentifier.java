@@ -7,9 +7,14 @@ public enum  CardIdentifier {
     AVANIUS("koning avanius")     //koning
     ;
     //TODO add more cards
+    private String name;
 
 
-    CardIdentifier(String s) {
+    CardIdentifier(String name) {
+        this.name = name;
+    }
 
+    public String getName() {
+        return name;
     }
 }
