@@ -1,47 +1,26 @@
 package mob.sdk.cards;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class CardRepository {
-    private static ArrayList<Card> cards;
-    private static final int PARFOES = 0;
+public enum CardRepository {
+    INSTANCE;
 
-    public CardRepository() {
-        cards = new ArrayList<>();
-    }
+    private final Map<String, Card> cardMap = new HashMap<>();
 
-    public ArrayList<Card> getCards() {
-        return cards;
-    }
+    CardRepository() {
+        Card[] cards = new Card[]{
+            new Card(CardType.BOW, "parfoes"),
+            new Card(CardType.SWORD, "kevin"),
+            new Card(CardType.SHIELD, "barry"),
+        };
 
-    public static void initCards() {
-        cards.add(new Card(CardType.BOW, CardIdentifier.PARFOES));
-        cards.add(new Card(CardType.SWORD,CardIdentifier.KEVIN));
-        cards.add(new Card(CardType.SHIELD,CardIdentifier.BARRY));
-        //TODO add more cards
-    }
-
-    public static Card get(Card card) {
-        for (Card card1 : cards) {
-            if (card1.equals(card)) {
-                return card1;
-            }
-        }
-        return null;
-    }
-
-    public static Card getCard(CardIdentifier identifier) {
         for (Card card : cards) {
-            if (card.getIdentifier() == identifier) {
-                return card;
-            }
+            cardMap.put(card.getId(), card);
         }
-        return null;
     }
 
-
+    public Card getCard(String id) {
+        return cardMap.get(id);
+    }
 }

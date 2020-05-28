@@ -1,17 +1,15 @@
 package mob.sdk.networking.payloads;
 
-import mob.sdk.cards.Card;
-
 import java.io.Serializable;
 
 public class CardResult implements Serializable {
-    private Card card;
+    private String cardId;
 
-    public CardResult(Card card) {
-        this.card = card;
+    public CardResult(String cardId) {
+        this.cardId = cardId;
     }
 
-    public Card getCard() {
-        return card;
+    public String getCardId() {
+        return cardId;
     }
 }

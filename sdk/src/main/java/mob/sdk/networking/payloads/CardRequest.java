@@ -3,13 +3,13 @@ package mob.sdk.networking.payloads;
 import java.io.Serializable;
 
 public class CardRequest implements Serializable {
-    private String code;
+    private String cardCode;
 
-    public CardRequest(String code) {
-        this.code = code;
+    public CardRequest(String cardCode) {
+        this.cardCode = cardCode;
     }
 
-    public String getCode() {
-        return code;
+    public String getCardCode() {
+        return cardCode;
     }
 }

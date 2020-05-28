@@ -3,13 +3,13 @@ package mob.sdk.networking.payloads;
 import java.io.Serializable;
 
 public class CardRequestInvalid implements Serializable {
-    private String code;
+    private String cardCode;
 
-    public CardRequestInvalid(String code) {
-        this.code = code;
+    public CardRequestInvalid(String cardCode) {
+        this.cardCode = cardCode;
     }
 
-    public String getCode() {
-        return code;
+    public String getCardCode() {
+        return cardCode;
     }
 }

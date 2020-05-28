@@ -4,19 +4,19 @@ import java.io.Serializable;
 
 public class Card implements Serializable, Comparable<Card> {
     private final CardType cardType;
-    private final CardIdentifier identifier;
+    private final String id;
 
-    public Card(CardType cardType, CardIdentifier identifier) {
+    public Card(CardType cardType, String id) {
         this.cardType = cardType;
-        this.identifier = identifier;
+        this.id = id;
     }
 
     public CardType getCardType() {
         return cardType;
     }
 
-    public CardIdentifier getIdentifier() {
-        return identifier;
+    public String getId() {
+        return id;
     }
 
     @Override
