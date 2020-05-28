@@ -19,6 +19,10 @@ public class BattleDevice extends Device {
         super(id, mqttClient);
 
         mqttClient.addSubscription(getTopic(), bytes -> {
+            if (!isPlaying.get()) {
+                return;
+            }
+
             String[] payload = new String(bytes).split(":");
 
             String type = payload[0];
