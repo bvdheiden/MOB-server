@@ -23,4 +23,7 @@ public enum CardRepository {
     public Card getCard(String id) {
         return cardMap.get(id);
     }
+    public int getSize() {
+        return this.cardMap.size();
+    }
 }
