@@ -10,6 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MQTTClient {
+    public static final String TOPIC_PREFIX = "groep/a3/";
+
     private final AtomicBoolean connecting = new AtomicBoolean(false);
 
     private MqttClient client;
