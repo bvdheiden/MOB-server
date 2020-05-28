@@ -1,7 +1,13 @@
 package mob.server.networking;
 
+import mob.sdk.cards.CardRepository;
 import mob.sdk.networking.LoggingCallback;
 import mob.sdk.networking.SocketClient;
+import mob.sdk.networking.Transaction;
+import mob.sdk.networking.TransactionType;
+import mob.sdk.networking.payloads.BattleRequest;
+import mob.sdk.networking.payloads.BattleRequestInvalid;
+import mob.sdk.networking.payloads.BattleResult;
 import mob.server.networking.mqtt.BattleDevice;
 import mob.server.networking.mqtt.CardDevice;
 
@@ -79,7 +85,9 @@ public class MOBServer implements LoggingCallback {
                         socketClientList.add(client);
 
                         client.addTransactionListener((transaction) -> {
-
+                            switch (transaction.getType()) {
+                                case BATTLE_REQUEST -> onBattleRequest(client, (BattleRequest) transaction.getPayload());
+                            }
                         });
 
                         client.addDisconnectionListener(() -> {
@@ -118,6 +126,41 @@ public class MOBServer implements LoggingCallback {
 
     public boolean isRunning() {
         return connecting.get() || (serverSocket != null && !serverSocket.isClosed());
+    }
+
+    private void onBattleRequest(SocketClient client, BattleRequest battleRequest) {
+        if (!battleDeviceMap.containsKey(battleRequest.getTableId())) {
+            client.send(new Transaction(TransactionType.BATTLE_REQUEST_INVALID, new BattleRequestInvalid(BattleRequestInvalid.REASON.DEVICE_ID_WRONG)));
+            return;
+        }
+
+        BattleDevice battleDevice = battleDeviceMap.get(battleRequest.getTableId());
+
+        if (battleDevice.isPlaying().get()) {
+            client.send(new Transaction(TransactionType.BATTLE_REQUEST_INVALID, new BattleRequestInvalid(BattleRequestInvalid.REASON.ALREADY_PLAYING)));
+            return;
+        }
+
+        if (!battleDevice.setClient(battleRequest.getTeamColor(), client)) {
+            client.send(new Transaction(TransactionType.BATTLE_REQUEST_INVALID, new BattleRequestInvalid(BattleRequestInvalid.REASON.TEAM_ALREADY_TAKEN)));
+            return;
+        }
+
+        if (battleDevice.isReady()) {
+            battleDevice.setOnAbort(battleDevice::reset);
+
+            battleDevice.setOnFinish((redWins, redClient, blueWins, blueClient) -> {
+                redClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(redWins, blueWins, redWins >= blueWins ? getRandomCardId() : null)));
+                blueClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(redWins, blueWins, blueWins >= redWins ? getRandomCardId() : null)));
+                battleDevice.reset();
+            });
+
+            battleDevice.sendReady();
+        }
+    }
+
+    private String getRandomCardId() {
+        return CardRepository.INSTANCE.getRandomId();
     }
 
     @Override

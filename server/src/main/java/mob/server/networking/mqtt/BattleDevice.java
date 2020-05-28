@@ -1,10 +1,19 @@
 package mob.server.networking.mqtt;
 
+import mob.sdk.networking.SocketClient;
+import mob.sdk.networking.payloads.BattleRequest;
 import mob.server.networking.MQTTClient;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BattleDevice extends Device {
     private AbortListener abortListener;
     private FinishListener finishListener;
+
+    private final AtomicBoolean isPlaying = new AtomicBoolean(false);
+    private final Map<BattleRequest.Color, SocketClient> clientMap = new ConcurrentHashMap<>();
 
     public BattleDevice(String id, MQTTClient mqttClient) {
         super(id, mqttClient);
@@ -17,16 +26,43 @@ public class BattleDevice extends Device {
             if (type.equals("abort") && abortListener != null) {
                 abortListener.onAbort();
             } else if (type.equals("finish") && finishListener != null) {
-                int p1Wins = Integer.parseInt(payload[1]);
-                int p2Wins = Integer.parseInt(payload[2]);
+                int redWins = Integer.parseInt(payload[1]);
+                int blueWins = Integer.parseInt(payload[2]);
 
-                finishListener.onFinished(p1Wins, p2Wins);
+                SocketClient redClient = clientMap.get(BattleRequest.Color.RED);
+                SocketClient blueClient = clientMap.get(BattleRequest.Color.BLUE);
+
+                finishListener.onFinished(redWins, redClient, blueWins, blueClient);
             }
         });
     }
 
+    public boolean setClient(BattleRequest.Color teamColor, SocketClient client) {
+        if (clientMap.containsKey(teamColor))
+            return false;
+
+        clientMap.put(teamColor, client);
+        return true;
+    }
+
+    public boolean isReady() {
+        return clientMap.size() == BattleRequest.Color.values().length;
+    }
+
+    public void reset() {
+        clientMap.clear();
+        abortListener = null;
+        finishListener = null;
+    }
+
     public void sendReady() {
-        publish("ready");
+        isPlaying.set(true);
+
+        publish(String.format("ready:%d,%d,%d|%d,%d,%d", 1, 1, 1, 1, 1, 1));
+    }
+
+    public AtomicBoolean isPlaying() {
+        return isPlaying;
     }
 
     public void setOnAbort(AbortListener listener) {
@@ -44,6 +80,6 @@ public class BattleDevice extends Device {
 
     @FunctionalInterface
     public interface FinishListener {
-        void onFinished(int p1Wins, int p2Wins);
+        void onFinished(int redWins, SocketClient redClient, int blueWins, SocketClient blueClient);
     }
 }
