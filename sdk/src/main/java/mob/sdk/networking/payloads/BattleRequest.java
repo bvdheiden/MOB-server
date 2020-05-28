@@ -3,20 +3,20 @@ package mob.sdk.networking.payloads;
 import java.io.Serializable;
 
 public class BattleRequest implements Serializable {
-    private final int tableNumber;
-    private final Color color;
+    private final String tableId;
+    private final Color teamColor;
 
-    public BattleRequest(int tableNumber, Color color) {
-        this.tableNumber = tableNumber;
-        this.color = color;
+    public BattleRequest(String tableId, Color teamColor) {
+        this.tableId = tableId;
+        this.teamColor = teamColor;
     }
 
-    public int getTableNumber() {
-        return tableNumber;
+    public String getTableId() {
+        return tableId;
     }
 
-    public Color getColor() {
-        return color;
+    public Color getTeamColor() {
+        return teamColor;
     }
 
     public enum Color {
