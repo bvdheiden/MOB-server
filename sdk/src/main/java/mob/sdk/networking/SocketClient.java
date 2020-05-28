@@ -45,16 +45,23 @@ public class SocketClient {
     }
 
     public void send(Transaction transaction) {
+        send(transaction, null, null);
+    }
+
+    public void send(Transaction transaction, SuccessListener successListener, FailureListener failureListener) {
         if (!socket.isConnected() || socket.isClosed()) {
             return;
         }
 
         try {
             out.writeObject(transaction);
-
             printf("send transaction %s with payload: %s to client: %s.", transaction.getType(), transaction.getPayload(), hashCode());
+            if (successListener != null)
+                successListener.onSuccess();
         } catch (IOException exception) {
             printf("Failed to send data to client: %s.", hashCode());
+            if (failureListener != null)
+                failureListener.onFailure();
             stop();
         }
     }
@@ -100,5 +107,15 @@ public class SocketClient {
 
     public static void addLoggingCallback(LoggingCallback callback) {
         loggingCallback = callback;
+    }
+
+    @FunctionalInterface
+    public interface SuccessListener {
+        void onSuccess();
+    }
+
+    @FunctionalInterface
+    public interface FailureListener {
+        void onFailure();
     }
 }
