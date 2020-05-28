@@ -13,6 +13,6 @@ public class BattleRequestInvalid {
 
     public enum Field {
         TABLE_ID,
-        TABLE_COLOR
+        TEAM_COLOR
     }
 }
