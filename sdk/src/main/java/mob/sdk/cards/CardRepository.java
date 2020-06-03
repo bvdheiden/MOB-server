@@ -9,6 +9,7 @@ public enum CardRepository {
 
     CardRepository() {
         Card[] cards = new Card[]{
+                // Pardoes
                 new Card(CardType.BOW, "parfoes", "Parfoes de Nar"),
                 new Card(CardType.SWORD, "kevin", "Knecht Kevin"),
                 new Card(CardType.SHIELD, "barry", "Barbaar Barry"),
@@ -19,27 +20,27 @@ public enum CardRepository {
                 new Card(CardType.SWORD, "alicia", "Alicia Taart"),
                 new Card(CardType.SHIELD, "pent", "Proffesor Pent"),
                 new Card(CardType.BOW, "pardaan", "Princes Pardaan"),
-                new Card(CardType.SWORD, "rat", "Rik de Rat")
-            // Fairy tree
-            new Card(CardType.BOW, "midget-ku", "Midget Ku"),
-            new Card(CardType.SWORD, "klein-teentje", "Klein teentje"),
-            new Card(CardType.SHIELD, "midget-kie", "Midget kie"),
-            new Card(CardType.BOW, "midget-ko", "Midget Ko"),
-            new Card(CardType.SWORD, "kleinnek", "Kleinnek"),
-            new Card(CardType.SHIELD, "sprookjesplant", "Sprookjesplant"),
-            new Card(CardType.BOW, "boze-hond", "Boze hond"),
-            new Card(CardType.SWORD, "blauwkapje", "Blauwkapje"),
-            new Card(CardType.SHIELD, "gigant", "Gigant"),
-            new Card(CardType.BOW, "midget-kei", "Midget Kei"),
-            new Card(CardType.SWORD, "paard", "Paard"),
-            new Card(CardType.SHIELD, "tapijtmeester", "Tapijtmeester"),
-            new Card(CardType.BOW, "bassiepoester", "Bassiepoester"),
-            new Card(CardType.SWORD, "vliegend-figuur", "Vliegend figuur"),
-            new Card(CardType.SHIELD, "konijn-benjamin", "Konijn Benjamin"),
-            new Card(CardType.BOW, "tovervrouw", "Tovervrouw"),
-            new Card(CardType.SWORD, "midget-ka", "Midget Ka"),
-            new Card(CardType.SHIELD, "midget-ke", "Midget Ke"),
-            new Card(CardType.BOW, "midget-keu", "Midget Keu"),
+                new Card(CardType.SWORD, "rat", "Rik de Rat"),
+                // Fairy tree
+                new Card(CardType.BOW, "midget-ku", "Midget Ku"),
+                new Card(CardType.SWORD, "klein-teentje", "Klein teentje"),
+                new Card(CardType.SHIELD, "midget-kie", "Midget kie"),
+                new Card(CardType.BOW, "midget-ko", "Midget Ko"),
+                new Card(CardType.SWORD, "kleinnek", "Kleinnek"),
+                new Card(CardType.SHIELD, "sprookjesplant", "Sprookjesplant"),
+                new Card(CardType.BOW, "boze-hond", "Boze hond"),
+                new Card(CardType.SWORD, "blauwkapje", "Blauwkapje"),
+                new Card(CardType.SHIELD, "gigant", "Gigant"),
+                new Card(CardType.BOW, "midget-kei", "Midget Kei"),
+                new Card(CardType.SWORD, "paard", "Paard"),
+                new Card(CardType.SHIELD, "tapijtmeester", "Tapijtmeester"),
+                new Card(CardType.BOW, "bassiepoester", "Bassiepoester"),
+                new Card(CardType.SWORD, "vliegend-figuur", "Vliegend figuur"),
+                new Card(CardType.SHIELD, "konijn-benjamin", "Konijn Benjamin"),
+                new Card(CardType.BOW, "tovervrouw", "Tovervrouw"),
+                new Card(CardType.SWORD, "midget-ka", "Midget Ka"),
+                new Card(CardType.SHIELD, "midget-ke", "Midget Ke"),
+                new Card(CardType.BOW, "midget-keu", "Midget Keu"),
         };
 
         for (Card card : cards) {
