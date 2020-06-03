@@ -134,6 +134,7 @@ public class MobServer implements LoggingCallback {
 
     /**
      * Appoints a new card and associated unique card code to a card device.
+     *
      * @param cardDevice card device
      */
     public synchronized void appointNewCard(CardDevice cardDevice) {
@@ -167,6 +168,7 @@ public class MobServer implements LoggingCallback {
         cardDevice.setCard(cardId, cardCode);
     }
 
+
     private String generateCardCode() {
         return ""; // @todo make card code generator
     }
@@ -191,6 +193,7 @@ public class MobServer implements LoggingCallback {
 
             // send card result
             client.send(new Transaction(TransactionType.CARD_RESULT, new CardResult(cardDevice.getCardId())));
+            cardDevice.publish("claimed");
             return;
         }
 
