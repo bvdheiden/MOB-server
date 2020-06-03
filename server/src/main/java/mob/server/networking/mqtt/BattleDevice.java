@@ -63,7 +63,7 @@ public class BattleDevice extends Device {
     public void sendReady() {
         isPlaying.set(true);
 
-        publish(String.format("ready:%d,%d,%d|%d,%d,%d", 1, 1, 1, 1, 1, 1));
+        publish("ready");
     }
 
     public AtomicBoolean isPlaying() {
