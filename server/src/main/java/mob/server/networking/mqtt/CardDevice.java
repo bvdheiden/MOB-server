@@ -1,5 +1,6 @@
 package mob.server.networking.mqtt;
 
+import mob.sdk.cards.CardRepository;
 import mob.sdk.networking.SocketClient;
 import mob.server.networking.MqttClient;
 
@@ -37,7 +38,9 @@ public class CardDevice extends Device {
         clientHistoryList.clear();
         cardsLeft.set(CAPACITY);
 
-        mqttClient.publish(getTopic(), cardCode.getBytes());
+        String cardName = CardRepository.INSTANCE.getCard(cardId).getName();
+
+        mqttClient.publish(getTopic(), String.format("new:%s:%s:%d", cardName, cardCode, CAPACITY).getBytes());
     }
 
     /**
@@ -48,7 +51,7 @@ public class CardDevice extends Device {
         clientHistoryList.add(client);
         cardsLeft.set(cardsLeft.get() - 1);
 
-        publish("claimed");
+        publish("decrease");
     }
 
     /**

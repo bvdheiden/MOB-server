@@ -9,9 +9,9 @@ public enum CardRepository {
 
     CardRepository() {
         Card[] cards = new Card[]{
-            new Card(CardType.BOW, "parfoes"),
-            new Card(CardType.SWORD, "kevin"),
-            new Card(CardType.SHIELD, "barry"),
+            new Card(CardType.BOW, "parfoes", "Parfoes"),
+            new Card(CardType.SWORD, "kevin", "Kevin"),
+            new Card(CardType.SHIELD, "barry", "Barry"),
         };
 
         for (Card card : cards) {
