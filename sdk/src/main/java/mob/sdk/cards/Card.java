@@ -20,6 +20,14 @@ public class Card implements Serializable, Comparable<Card> {
     }
 
     @Override
+    public String toString() {
+        return "Card{" +
+                "cardType=" + cardType +
+                ", id='" + id + '\'' +
+                '}';
+    }
+
+    @Override
     public int compareTo(Card o) {
         switch (cardType) {
             case BOW:
