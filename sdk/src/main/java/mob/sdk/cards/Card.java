@@ -30,9 +30,9 @@ public class Card implements Serializable, Comparable<Card> {
                 break;
             case SWORD:
                 if (o.cardType == CardType.BOW)
-                    return -1;
-                if (o.cardType == CardType.SHIELD)
                     return 1;
+                if (o.cardType == CardType.SHIELD)
+                    return -1;
                 break;
             case SHIELD:
                 if (o.cardType == CardType.BOW)
