@@ -155,9 +155,6 @@ public class MobServer implements LoggingCallback {
 
         // collect used card ids and codes
         for (CardDevice usedCardDevice : cardDeviceMap.values()) {
-            if (cardDevice == usedCardDevice)
-                continue;
-
             usedCardIdList.add(usedCardDevice.getCardCode());
             usedCardCodeList.add(usedCardDevice.getCardCode());
         }
