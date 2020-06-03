@@ -19,24 +19,34 @@ public class BattleDevice extends Device {
         super(id, mqttClient);
 
         mqttClient.addSubscription(getTopic(), bytes -> {
-            if (!isPlaying.get()) {
-                return;
-            }
+            try {
+                if (!isPlaying.get()) {
+                    return;
+                }
 
-            String[] payload = new String(bytes).split(":");
+                MqttClient.printf("Received payload: %s from %s", new String(bytes), id);
 
-            String type = payload[0];
+                String[] payload = new String(bytes).split(":");
 
-            if (type.equals("abort") && abortListener != null) {
-                abortListener.onAbort();
-            } else if (type.equals("finish") && finishListener != null) {
-                int redWins = Integer.parseInt(payload[1]);
-                int blueWins = Integer.parseInt(payload[2]);
+                String type = payload[0];
 
-                SocketClient redClient = clientMap.get(BattleRequest.Color.RED);
-                SocketClient blueClient = clientMap.get(BattleRequest.Color.BLUE);
+                MqttClient.printf("Payload: %s");
 
-                finishListener.onFinished(redWins, redClient, blueWins, blueClient);
+                if (type.equals("abort") && abortListener != null) {
+                    abortListener.onAbort();
+                } else if (type.equals("finish") && finishListener != null) {
+                    int redWins = Integer.parseInt(payload[1]);
+                    int blueWins = Integer.parseInt(payload[2]);
+
+                    MqttClient.printf("Red wins: %d Blue wins: %d", redWins, blueWins);
+
+                    SocketClient redClient = clientMap.get(BattleRequest.Color.RED);
+                    SocketClient blueClient = clientMap.get(BattleRequest.Color.BLUE);
+
+                    finishListener.onFinished(redWins, redClient, blueWins, blueClient);
+                }
+            } catch (Exception e) {
+                MqttClient.printf("Topic: %s went wrong: %s", getTopic(), e.getMessage());
             }
         });
     }

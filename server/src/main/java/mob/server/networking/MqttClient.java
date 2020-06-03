@@ -92,6 +92,18 @@ public class MqttClient {
     }
 
     public void addSubscription(String topic, SubscriptionListener listener) {
+        if (isRunning()) {
+            try {
+                client.subscribe(topic, (_topic, message) -> {
+                    listener.onMessage(message.getPayload());
+                });
+
+                printf("Added listener for topic: %s", topic);
+            } catch (MqttException e) {
+                printf("Failed to add listener for topic: %s");
+            }
+        }
+
         if (!subscriptionListenerMap.containsKey(topic)) {
             subscriptionListenerMap.put(topic, new CopyOnWriteArrayList<>());
         }
@@ -111,11 +123,11 @@ public class MqttClient {
         }
     }
 
-    private static void print(String string) {
+    public static void print(String string) {
         System.out.println("MQTT > " + string);
     }
 
-    private static void printf(String string, Object... params) {
+    public static void printf(String string, Object... params) {
         System.out.printf("MQTT > " + string + "%n", params);
     }
 

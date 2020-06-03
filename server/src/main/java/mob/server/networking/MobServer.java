@@ -33,24 +33,36 @@ public class MobServer implements LoggingCallback {
 
     public MobServer(MqttClient mqttClient) {
         mqttClient.addSubscription(MqttClient.TOPIC_PREFIX + "connect", bytes -> {
-            String[] payload = new String(bytes).split(":");
+            try {
+                String[] payload = new String(bytes).split(":");
 
-            String deviceType = payload[0];
-            String deviceId = payload[1];
+                String deviceType = payload[0];
+                String deviceId = payload[1];
 
-            switch (deviceType) {
-                case "battle":
-                    BattleDevice battleDevice = new BattleDevice(deviceId, mqttClient);
+                MqttClient.printf("Device of type: %s and id: %s is trying to connect", deviceType, deviceId);
 
-                    battleDeviceMap.put(deviceId, battleDevice);
-                    break;
-                case "card":
-                    CardDevice cardDevice = new CardDevice(deviceId, mqttClient);
+                switch (deviceType) {
+                    case "battle":
+                        BattleDevice battleDevice = new BattleDevice(deviceId, mqttClient);
 
-                    appointNewCard(cardDevice);
+                        battleDeviceMap.put(deviceId, battleDevice);
 
-                    cardDeviceMap.put(deviceId, cardDevice);
-                    break;
+                        MqttClient.print("Successfully connected battle device");
+
+                        break;
+                    case "card":
+                        CardDevice cardDevice = new CardDevice(deviceId, mqttClient);
+
+//                        appointNewCard(cardDevice);
+
+                        cardDeviceMap.put(deviceId, cardDevice);
+
+                        MqttClient.print("Successfully connected card device");
+
+                        break;
+                }
+            } catch (Exception exception) {
+                MqttClient.printf("Something went wrong while connecting a device: %s", exception.getMessage());
             }
         });
 
