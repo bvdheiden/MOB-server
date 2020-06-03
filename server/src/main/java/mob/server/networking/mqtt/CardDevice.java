@@ -47,6 +47,8 @@ public class CardDevice extends Device {
     public void setClaimed(SocketClient client) {
         clientHistoryList.add(client);
         cardsLeft.set(cardsLeft.get() - 1);
+
+        publish("claimed");
     }
 
     /**
