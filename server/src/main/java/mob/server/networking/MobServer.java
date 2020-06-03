@@ -1,6 +1,5 @@
 package mob.server.networking;
 
-import mob.sdk.cards.CardRepository;
 import mob.sdk.networking.LoggingCallback;
 import mob.sdk.networking.SocketClient;
 import mob.sdk.networking.Transaction;
@@ -8,6 +7,7 @@ import mob.sdk.networking.TransactionType;
 import mob.sdk.networking.payloads.BattleRequest;
 import mob.sdk.networking.payloads.BattleRequestInvalid;
 import mob.sdk.networking.payloads.BattleResult;
+import mob.sdk.networking.payloads.CardRequest;
 import mob.server.networking.mqtt.BattleDevice;
 import mob.server.networking.mqtt.CardDevice;
 
@@ -87,6 +87,7 @@ public class MobServer implements LoggingCallback {
                         client.addTransactionListener((transaction) -> {
                             switch (transaction.getType()) {
                                 case BATTLE_REQUEST -> onBattleRequest(client, (BattleRequest) transaction.getPayload());
+                                case CARD_REQUEST -> onCardRequest(client, (CardRequest) transaction.getPayload());
                             }
                         });
 
@@ -128,7 +129,14 @@ public class MobServer implements LoggingCallback {
         return connecting.get() || (serverSocket != null && !serverSocket.isClosed());
     }
 
+    /**
+     * Handle client battle request.
+     *
+     * @param client        client
+     * @param battleRequest request
+     */
     private void onBattleRequest(SocketClient client, BattleRequest battleRequest) {
+        // check if table with id exists
         if (!battleDeviceMap.containsKey(battleRequest.getTableId())) {
             client.send(new Transaction(TransactionType.BATTLE_REQUEST_INVALID, new BattleRequestInvalid(BattleRequestInvalid.REASON.DEVICE_ID_WRONG)));
             return;
@@ -136,22 +144,25 @@ public class MobServer implements LoggingCallback {
 
         BattleDevice battleDevice = battleDeviceMap.get(battleRequest.getTableId());
 
+        // check if table is already playing
         if (battleDevice.isPlaying().get()) {
             client.send(new Transaction(TransactionType.BATTLE_REQUEST_INVALID, new BattleRequestInvalid(BattleRequestInvalid.REASON.ALREADY_PLAYING)));
             return;
         }
 
+        // check if color is already selected
         if (!battleDevice.setClient(battleRequest.getTeamColor(), client)) {
             client.send(new Transaction(TransactionType.BATTLE_REQUEST_INVALID, new BattleRequestInvalid(BattleRequestInvalid.REASON.TEAM_ALREADY_TAKEN)));
             return;
         }
 
         if (battleDevice.isReady()) {
+            // start game when both teams are ready
             battleDevice.setOnAbort(battleDevice::reset);
 
             battleDevice.setOnFinish((redWins, redClient, blueWins, blueClient) -> {
-                redClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(redWins, blueWins, redWins >= blueWins ? getRandomCardId() : null)));
-                blueClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(redWins, blueWins, blueWins >= redWins ? getRandomCardId() : null)));
+                redClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(redWins, blueWins)));
+                blueClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(redWins, blueWins)));
                 battleDevice.reset();
             });
 
@@ -159,8 +170,14 @@ public class MobServer implements LoggingCallback {
         }
     }
 
-    private String getRandomCardId() {
-        return CardRepository.INSTANCE.getRandomId();
+    /**
+     * Handle client card request.
+     *
+     * @param client      client
+     * @param cardRequest request
+     */
+    private void onCardRequest(SocketClient client, CardRequest cardRequest) {
+
     }
 
     @Override

@@ -5,12 +5,10 @@ import java.io.Serializable;
 public class BattleResult implements Serializable {
     private final int amountWon;
     private final int amountLost;
-    private final String cardId;
 
-    public BattleResult(int amountWon, int amountLost, String cardId) {
+    public BattleResult(int amountWon, int amountLost) {
         this.amountWon = amountWon;
         this.amountLost = amountLost;
-        this.cardId = cardId;
     }
 
     public int getAmountWon() {
@@ -19,10 +17,6 @@ public class BattleResult implements Serializable {
 
     public int getAmountLost() {
         return amountLost;
-    }
-
-    public String getCardId() {
-        return cardId;
     }
 
     public boolean hasWon() {
