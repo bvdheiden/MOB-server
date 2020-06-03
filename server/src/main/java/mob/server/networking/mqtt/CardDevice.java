@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardDevice extends Device {
-    private static final int CAPACITY = 3;
+    private static final int CAPACITY = 1;
 
     private String cardId;
     private String cardCode;
