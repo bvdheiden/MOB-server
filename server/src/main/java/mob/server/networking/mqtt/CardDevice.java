@@ -5,11 +5,15 @@ import mob.server.networking.MqttClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardDevice extends Device {
+    private static final int CAPACITY = 3;
+
     private String cardId;
     private String cardCode;
     private final List<SocketClient> clientHistoryList = new ArrayList<>();
+    private final AtomicInteger cardsLeft = new AtomicInteger(0);
 
     public CardDevice(String id, MqttClient mqttClient) {
         super(id, mqttClient);
@@ -23,10 +27,15 @@ public class CardDevice extends Device {
         return cardCode;
     }
 
+    public AtomicInteger getCardsLeft() {
+        return cardsLeft;
+    }
+
     public void setCard(String cardId, String cardCode) {
         this.cardId = cardId;
         this.cardCode = cardCode;
         clientHistoryList.clear();
+        cardsLeft.set(CAPACITY);
 
         mqttClient.publish(getTopic(), cardCode.getBytes());
     }
@@ -37,6 +46,7 @@ public class CardDevice extends Device {
      */
     public void setClaimed(SocketClient client) {
         clientHistoryList.add(client);
+        cardsLeft.set(cardsLeft.get() - 1);
     }
 
     /**

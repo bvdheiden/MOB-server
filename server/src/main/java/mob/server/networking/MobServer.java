@@ -211,6 +211,9 @@ public class MobServer implements LoggingCallback {
 
             cardDevice.setClaimed(client);
 
+            if (cardDevice.getCardsLeft().get() == 0)
+                appointNewCard(cardDevice);
+
             // send card result
             client.send(new Transaction(TransactionType.CARD_RESULT, new CardResult(cardDevice.getCardId())));
             cardDevice.publish("claimed");
