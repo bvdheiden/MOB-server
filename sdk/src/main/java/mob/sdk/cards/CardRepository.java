@@ -9,9 +9,17 @@ public enum CardRepository {
 
     CardRepository() {
         Card[] cards = new Card[]{
-            new Card(CardType.BOW, "parfoes", "Parfoes"),
-            new Card(CardType.SWORD, "kevin", "Kevin"),
-            new Card(CardType.SHIELD, "barry", "Barry"),
+                new Card(CardType.BOW, "parfoes", "Parfoes de Nar"),
+                new Card(CardType.SWORD, "kevin", "Knecht Kevin"),
+                new Card(CardType.SHIELD, "barry", "Barbaar Barry"),
+                new Card(CardType.BOW, "bolle", "Volle Bolle"),
+                new Card(CardType.SWORD, "avanius", "Koning Avanius"),
+                new Card(CardType.SHIELD, "mevrouw", "Mevrouw Madam"),
+                new Card(CardType.BOW, "almanak", "Meester Almanak"),
+                new Card(CardType.SWORD, "alicia", "Alicia Taart"),
+                new Card(CardType.SHIELD, "pent", "Proffesor Pent"),
+                new Card(CardType.BOW, "pardaan", "Princes Pardaan"),
+                new Card(CardType.SWORD, "rat", "Rik de Rat")
         };
 
         for (Card card : cards) {
