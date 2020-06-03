@@ -2,7 +2,7 @@ package mob.server.networking.mqtt;
 
 import mob.sdk.networking.SocketClient;
 import mob.sdk.networking.payloads.BattleRequest;
-import mob.server.networking.MQTTClient;
+import mob.server.networking.MqttClient;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +15,7 @@ public class BattleDevice extends Device {
     private AbortListener abortListener;
     private FinishListener finishListener;
 
-    public BattleDevice(String id, MQTTClient mqttClient) {
+    public BattleDevice(String id, MqttClient mqttClient) {
         super(id, mqttClient);
 
         mqttClient.addSubscription(getTopic(), bytes -> {

@@ -12,15 +12,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import mob.server.networking.MOBServer;
-import mob.server.networking.MQTTClient;
+import mob.server.networking.MobServer;
+import mob.server.networking.MqttClient;
 
 import java.io.*;
 import java.util.StringJoiner;
 
 public class Server extends Application {
-    private MQTTClient mqttClient = new MQTTClient();
-    private MOBServer server = new MOBServer(mqttClient);
+    private MqttClient mqttClient = new MqttClient();
+    private MobServer server = new MobServer(mqttClient);
     private String lastBroker;
     private String lastUsername;
     private String lastPassword;

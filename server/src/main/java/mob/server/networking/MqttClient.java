@@ -9,12 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MQTTClient {
+public class MqttClient {
     public static final String TOPIC_PREFIX = "groep/a3/";
 
     private final AtomicBoolean connecting = new AtomicBoolean(false);
 
-    private MqttClient client;
+    private org.eclipse.paho.client.mqttv3.MqttClient client;
 
     private List<ConnectionListener> connectionListeners = new CopyOnWriteArrayList<>();
     private List<DisconnectionListener> disconnectionListeners = new CopyOnWriteArrayList<>();
@@ -35,7 +35,7 @@ public class MQTTClient {
         new Thread(() -> {
             try {
                 printf("Connecting to MQTT broker: %s.", String.format("tcp://%s", broker));
-                this.client = new MqttClient(String.format("tcp://%s", broker), MqttClient.generateClientId(), new MemoryPersistence());
+                this.client = new org.eclipse.paho.client.mqttv3.MqttClient(String.format("tcp://%s", broker), org.eclipse.paho.client.mqttv3.MqttClient.generateClientId(), new MemoryPersistence());
                 client.connect(connectOptions);
                 for (ConnectionListener listener : connectionListeners)
                     listener.onConnection();

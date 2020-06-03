@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MOBServer implements LoggingCallback {
+public class MobServer implements LoggingCallback {
     private final AtomicBoolean connecting = new AtomicBoolean(false);
     private final AtomicBoolean mqttConnected = new AtomicBoolean(false);
     private final List<SocketClient> socketClientList = new CopyOnWriteArrayList<>();
@@ -30,8 +30,8 @@ public class MOBServer implements LoggingCallback {
 
     private ServerSocket serverSocket;
 
-    public MOBServer(MQTTClient mqttClient) {
-        mqttClient.addSubscription(MQTTClient.TOPIC_PREFIX + "connect", bytes -> {
+    public MobServer(MqttClient mqttClient) {
+        mqttClient.addSubscription(MqttClient.TOPIC_PREFIX + "connect", bytes -> {
             String[] payload = new String(bytes).split(":");
 
             String deviceType = payload[0];
