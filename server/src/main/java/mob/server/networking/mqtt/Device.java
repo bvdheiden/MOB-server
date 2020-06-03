@@ -9,6 +9,8 @@ public abstract class Device {
     public Device(String id, MqttClient mqttClient) {
         this.id = id;
         this.mqttClient = mqttClient;
+
+        mqttClient.publish(getTopic(), "connected".getBytes());
     }
 
     public void publish(String payload) {
