@@ -1,7 +1,6 @@
 package mob.sdk.cards;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public enum CardRepository {
     INSTANCE;
@@ -23,6 +22,19 @@ public enum CardRepository {
     public Card getCard(String id) {
         return cardMap.get(id);
     }
+
+    public String getRandomId() {
+        List<String> cardIds = new ArrayList<>(cardMap.keySet());
+
+        Random random = new Random();
+
+        return cardIds.get(random.nextInt(cardIds.size() - 1));
+    }
+
+    public List<String> getCardIds() {
+        return new ArrayList<>(cardMap.keySet());
+    }
+
     public int getSize() {
         return this.cardMap.size();
     }

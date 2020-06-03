@@ -1,18 +1,21 @@
 package mob.sdk.networking.payloads;
 
-public class BattleRequestInvalid {
-    private final Field field;
+import java.io.Serializable;
 
-    public BattleRequestInvalid(Field field) {
-        this.field = field;
+public class BattleRequestInvalid implements Serializable {
+    private final REASON reason;
+
+    public BattleRequestInvalid(REASON reason) {
+        this.reason = reason;
     }
 
-    public Field getField() {
-        return field;
+    public REASON getReason() {
+        return reason;
     }
 
-    public enum Field {
-        TABLE_ID,
-        TEAM_COLOR
+    public enum REASON {
+        DEVICE_ID_WRONG,
+        TEAM_ALREADY_TAKEN,
+        ALREADY_PLAYING
     }
 }

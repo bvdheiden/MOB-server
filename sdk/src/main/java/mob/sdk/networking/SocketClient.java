@@ -93,6 +93,16 @@ public class SocketClient {
         }
     }
 
+    @FunctionalInterface
+    public interface SuccessListener {
+        void onSuccess();
+    }
+
+    @FunctionalInterface
+    public interface FailureListener {
+        void onFailure();
+    }
+
     public static void print(String string) {
         if (loggingCallback != null) {
             loggingCallback.print("Network > " + string);
@@ -107,15 +117,5 @@ public class SocketClient {
 
     public static void addLoggingCallback(LoggingCallback callback) {
         loggingCallback = callback;
-    }
-
-    @FunctionalInterface
-    public interface SuccessListener {
-        void onSuccess();
-    }
-
-    @FunctionalInterface
-    public interface FailureListener {
-        void onFailure();
     }
 }
