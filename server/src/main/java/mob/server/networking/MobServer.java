@@ -53,7 +53,7 @@ public class MobServer implements LoggingCallback {
                     case "card":
                         CardDevice cardDevice = new CardDevice(deviceId, mqttClient);
 
-//                        appointNewCard(cardDevice);
+                        appointNewCard(cardDevice);
 
                         cardDeviceMap.put(deviceId, cardDevice);
 
@@ -162,9 +162,9 @@ public class MobServer implements LoggingCallback {
         }
 
         // filter for available card ids
-        List<String> availableCardIdList = CardRepository.INSTANCE.getCardIds().stream()
+        List<String> availableCardIdList = usedCardIdList.size() > 0 ? CardRepository.INSTANCE.getCardIds().stream()
                 .filter(cardId -> !usedCardIdList.contains(cardId))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()) : CardRepository.INSTANCE.getCardIds();
 
         // get random available card id
         String cardId = availableCardIdList.get(new Random().nextInt(availableCardIdList.size() - 1));
@@ -173,14 +173,22 @@ public class MobServer implements LoggingCallback {
         String cardCode;
         do {
             cardCode = generateCardCode();
-        } while (!usedCardCodeList.contains(cardCode));
+        } while (usedCardCodeList.contains(cardCode));
 
         // assign new card
         cardDevice.setCard(cardId, cardCode);
     }
 
     private String generateCardCode() {
-        return ""; // @todo make card code generator
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        return random.ints(leftLimit, rightLimit + 1)
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 
     /**
