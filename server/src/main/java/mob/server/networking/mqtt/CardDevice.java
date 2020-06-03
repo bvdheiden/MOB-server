@@ -51,7 +51,7 @@ public class CardDevice extends Device {
         clientHistoryList.add(client);
         cardsLeft.set(cardsLeft.get() - 1);
 
-        publish("decrease");
+        publish("decreased");
     }
 
     /**
