@@ -184,7 +184,7 @@ public class MobServer implements LoggingCallback {
     private String generateCardCode() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
-        int targetStringLength = 10;
+        int targetStringLength = 3;
         Random random = new Random();
 
         return random.ints(leftLimit, rightLimit + 1)
