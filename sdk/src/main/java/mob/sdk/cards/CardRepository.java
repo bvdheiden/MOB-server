@@ -31,6 +31,10 @@ public enum CardRepository {
         return cardIds.get(random.nextInt(cardIds.size() - 1));
     }
 
+    public List<String> getCardIds() {
+        return new ArrayList<>(cardMap.keySet());
+    }
+
     public int getSize() {
         return this.cardMap.size();
     }

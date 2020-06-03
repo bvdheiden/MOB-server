@@ -3,8 +3,8 @@ package mob.server.networking.mqtt;
 import mob.server.networking.MqttClient;
 
 public abstract class Device {
-    private final String id;
-    private final MqttClient mqttClient;
+    protected final String id;
+    protected final MqttClient mqttClient;
 
     public Device(String id, MqttClient mqttClient) {
         this.id = id;

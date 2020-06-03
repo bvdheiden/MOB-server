@@ -1,24 +1,25 @@
 package mob.server.networking;
 
+import mob.sdk.cards.CardRepository;
 import mob.sdk.networking.LoggingCallback;
 import mob.sdk.networking.SocketClient;
 import mob.sdk.networking.Transaction;
 import mob.sdk.networking.TransactionType;
-import mob.sdk.networking.payloads.BattleRequest;
-import mob.sdk.networking.payloads.BattleRequestInvalid;
-import mob.sdk.networking.payloads.BattleResult;
-import mob.sdk.networking.payloads.CardRequest;
+import mob.sdk.networking.payloads.*;
 import mob.server.networking.mqtt.BattleDevice;
 import mob.server.networking.mqtt.CardDevice;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class MobServer implements LoggingCallback {
     private final AtomicBoolean connecting = new AtomicBoolean(false);
@@ -45,6 +46,8 @@ public class MobServer implements LoggingCallback {
                     break;
                 case "card":
                     CardDevice cardDevice = new CardDevice(deviceId, mqttClient);
+
+                    appointNewCard(cardDevice);
 
                     cardDeviceMap.put(deviceId, cardDevice);
                     break;
@@ -86,8 +89,8 @@ public class MobServer implements LoggingCallback {
 
                         client.addTransactionListener((transaction) -> {
                             switch (transaction.getType()) {
-                                case BATTLE_REQUEST -> onBattleRequest(client, (BattleRequest) transaction.getPayload());
                                 case CARD_REQUEST -> onCardRequest(client, (CardRequest) transaction.getPayload());
+                                case BATTLE_REQUEST -> onBattleRequest(client, (BattleRequest) transaction.getPayload());
                             }
                         });
 
@@ -130,6 +133,72 @@ public class MobServer implements LoggingCallback {
     }
 
     /**
+     * Appoints a new card and associated unique card code to a card device.
+     * @param cardDevice card device
+     */
+    public synchronized void appointNewCard(CardDevice cardDevice) {
+        List<String> usedCardIdList = new ArrayList<>();
+        List<String> usedCardCodeList = new ArrayList<>();
+
+        // collect used card ids and codes
+        for (CardDevice usedCardDevice : cardDeviceMap.values()) {
+            if (cardDevice == usedCardDevice)
+                continue;
+
+            usedCardIdList.add(usedCardDevice.getCardCode());
+            usedCardCodeList.add(usedCardDevice.getCardCode());
+        }
+
+        // filter for available card ids
+        List<String> availableCardIdList = CardRepository.INSTANCE.getCardIds().stream()
+                .filter(cardId -> !usedCardIdList.contains(cardId))
+                .collect(Collectors.toList());
+
+        // get random available card id
+        String cardId = availableCardIdList.get(new Random().nextInt(availableCardIdList.size() - 1));
+
+        // generate new unique card code
+        String cardCode;
+        do {
+            cardCode = generateCardCode();
+        } while (!usedCardCodeList.contains(cardCode));
+
+        // assign new card
+        cardDevice.setCard(cardId, cardCode);
+    }
+
+    private String generateCardCode() {
+        return ""; // @todo make card code generator
+    }
+
+    /**
+     * Handle client card request.
+     *
+     * @param client      client
+     * @param cardRequest request
+     */
+    private void onCardRequest(SocketClient client, CardRequest cardRequest) {
+        for (CardDevice cardDevice : cardDeviceMap.values()) {
+            // check if card code matches
+            if (!cardDevice.getCardCode().equals(cardRequest.getCardCode()))
+                continue;
+
+            // check if card is claimed for client
+            if (cardDevice.isClaimed(client))
+                break;
+
+            cardDevice.setClaimed(client);
+
+            // send card result
+            client.send(new Transaction(TransactionType.CARD_RESULT, new CardResult(cardDevice.getCardId())));
+            return;
+        }
+
+        // send card invalid
+        client.send(new Transaction(TransactionType.CARD_REQUEST_INVALID, new CardRequestInvalid(cardRequest.getCardCode())));
+    }
+
+    /**
      * Handle client battle request.
      *
      * @param client        client
@@ -168,16 +237,6 @@ public class MobServer implements LoggingCallback {
 
             battleDevice.sendReady();
         }
-    }
-
-    /**
-     * Handle client card request.
-     *
-     * @param client      client
-     * @param cardRequest request
-     */
-    private void onCardRequest(SocketClient client, CardRequest cardRequest) {
-
     }
 
     @Override
