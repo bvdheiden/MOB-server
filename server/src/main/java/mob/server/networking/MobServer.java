@@ -155,9 +155,6 @@ public class MobServer implements LoggingCallback {
 
         // collect used card ids and codes
         for (CardDevice usedCardDevice : cardDeviceMap.values()) {
-            if (cardDevice == usedCardDevice)
-                continue;
-
             usedCardIdList.add(usedCardDevice.getCardCode());
             usedCardCodeList.add(usedCardDevice.getCardCode());
         }
@@ -209,13 +206,15 @@ public class MobServer implements LoggingCallback {
             if (cardDevice.isClaimed(client))
                 break;
 
+            String cardId = cardDevice.getCardId();
+
             cardDevice.setClaimed(client);
 
             if (cardDevice.getCardsLeft().get() == 0)
                 appointNewCard(cardDevice);
 
             // send card result
-            client.send(new Transaction(TransactionType.CARD_RESULT, new CardResult(cardDevice.getCardId())));
+            client.send(new Transaction(TransactionType.CARD_RESULT, new CardResult(cardId)));
             return;
         }
 
