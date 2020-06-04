@@ -4,6 +4,7 @@ import mob.sdk.networking.SocketClient;
 import mob.sdk.networking.payloads.BattleRequest;
 import mob.server.networking.MqttClient;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,7 +31,7 @@ public class BattleDevice extends Device {
 
                 String type = payload[0];
 
-                MqttClient.printf("Payload: %s");
+                MqttClient.printf("Payload: %s", payload);
 
                 if (type.equals("abort") && abortListener != null) {
                     abortListener.onAbort();
@@ -46,7 +47,7 @@ public class BattleDevice extends Device {
                     finishListener.onFinished(redWins, redClient, blueWins, blueClient);
                 }
             } catch (Exception e) {
-                MqttClient.printf("Topic: %s went wrong: %s", getTopic(), e.getMessage());
+                MqttClient.printf("Topic: %s went wrong: %s\n %s", getTopic(), e.getMessage(), Arrays.toString(e.getStackTrace()));
             }
         });
     }
