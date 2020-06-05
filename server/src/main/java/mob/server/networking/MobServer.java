@@ -255,7 +255,7 @@ public class MobServer implements LoggingCallback {
 
             battleDevice.setOnFinish((redWins, redClient, blueWins, blueClient) -> {
                 redClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(redWins, blueWins)));
-                blueClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(redWins, blueWins)));
+                blueClient.send(new Transaction(TransactionType.BATTLE_RESULT, new BattleResult(blueWins, redWins)));
                 battleDevice.reset();
             });
 
