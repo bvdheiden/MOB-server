@@ -55,8 +55,8 @@ public class BattleDevice extends Device {
     public boolean setClient(BattleRequest.Color teamColor, SocketClient client) {
         if (clientMap.containsKey(teamColor))
             return false;
-        if (clientMap.containsValue(client))
-            return false;
+//        if (clientMap.containsValue(client))
+//            return false;
 
         clientMap.put(teamColor, client);
         return true;
