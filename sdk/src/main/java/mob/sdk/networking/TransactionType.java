@@ -6,7 +6,5 @@ public enum TransactionType {
     BATTLE_RESULT,
     CARD_REQUEST,
     CARD_REQUEST_INVALID,
-    CARD_RESULT,
-    RANDOM_CARD_REQUEST,
-    RANDOM_CARD_RESULT
+    CARD_RESULT
 }
