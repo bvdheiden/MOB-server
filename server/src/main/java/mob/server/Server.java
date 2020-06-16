@@ -11,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import mob.server.networking.MobServer;
 import mob.server.networking.MqttClient;
 
@@ -19,8 +18,8 @@ import java.io.*;
 import java.util.StringJoiner;
 
 public class Server extends Application {
-    private MqttClient mqttClient = new MqttClient();
-    private MobServer server = new MobServer(mqttClient);
+    private final MqttClient mqttClient = new MqttClient();
+    private final MobServer server = new MobServer(mqttClient);
     private String lastBroker;
     private String lastUsername;
     private String lastPassword;
@@ -56,7 +55,9 @@ public class Server extends Application {
             mqttBrokerField.setText(login[0]);
             mqttUsernameField.setText(login[1]);
             mqttPasswordField.setText(login[2]);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            // nothing
+        }
 
         Label mqttClientLabel = new Label("MQTT client");
         Button mqttClientStartButton = new Button("Start");
@@ -80,7 +81,9 @@ public class Server extends Application {
 
                 try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(new File("login.dat")))) {
                     dataOutputStream.writeUTF(new StringJoiner("`-`").add(lastBroker).add(lastUsername).add(lastPassword).toString());
-                } catch (IOException e) { }
+                } catch (IOException e) {
+                    // nothing
+                }
             });
         });
 

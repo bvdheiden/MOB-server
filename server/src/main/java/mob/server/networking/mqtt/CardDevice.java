@@ -10,11 +10,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardDevice extends Device {
     private static final int CAPACITY = 1;
-
-    private String cardId;
-    private String cardCode;
     private final List<SocketClient> clientHistoryList = new ArrayList<>();
     private final AtomicInteger cardsLeft = new AtomicInteger(0);
+    private String cardId;
+    private String cardCode;
 
     public CardDevice(String id, MqttClient mqttClient) {
         super(id, mqttClient);
@@ -45,6 +44,7 @@ public class CardDevice extends Device {
 
     /**
      * Set the current card claimed for client.
+     *
      * @param client client
      */
     public void setClaimed(SocketClient client) {
@@ -56,6 +56,7 @@ public class CardDevice extends Device {
 
     /**
      * Check whether the client has claimed the current card.
+     *
      * @param client client
      */
     public boolean isClaimed(SocketClient client) {

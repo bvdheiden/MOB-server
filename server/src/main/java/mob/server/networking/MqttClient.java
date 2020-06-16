@@ -1,6 +1,9 @@
 package mob.server.networking;
 
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.util.List;
@@ -13,12 +16,18 @@ public class MqttClient {
     public static final String TOPIC_PREFIX = "groep/a3/";
 
     private final AtomicBoolean connecting = new AtomicBoolean(false);
-
+    private final List<ConnectionListener> connectionListeners = new CopyOnWriteArrayList<>();
+    private final List<DisconnectionListener> disconnectionListeners = new CopyOnWriteArrayList<>();
+    private final Map<String, List<SubscriptionListener>> subscriptionListenerMap = new ConcurrentHashMap<>();
     private org.eclipse.paho.client.mqttv3.MqttClient client;
 
-    private List<ConnectionListener> connectionListeners = new CopyOnWriteArrayList<>();
-    private List<DisconnectionListener> disconnectionListeners = new CopyOnWriteArrayList<>();
-    private Map<String, List<SubscriptionListener>> subscriptionListenerMap = new ConcurrentHashMap<>();
+    public static void print(String string) {
+        System.out.println("MQTT > " + string);
+    }
+
+    public static void printf(String string, Object... params) {
+        System.out.printf("MQTT > " + string + "%n", params);
+    }
 
     public void start(String broker, String username, String password) {
         if (isRunning()) {
@@ -121,14 +130,6 @@ public class MqttClient {
         } catch (MqttException e) {
             printf("Could not publish message on topic: %s with message: %s", topic, payload);
         }
-    }
-
-    public static void print(String string) {
-        System.out.println("MQTT > " + string);
-    }
-
-    public static void printf(String string, Object... params) {
-        System.out.printf("MQTT > " + string + "%n", params);
     }
 
     @FunctionalInterface

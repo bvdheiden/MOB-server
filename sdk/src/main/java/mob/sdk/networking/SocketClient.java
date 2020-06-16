@@ -44,6 +44,22 @@ public class SocketClient {
         }).start();
     }
 
+    public static void print(String string) {
+        if (loggingCallback != null) {
+            loggingCallback.print("Network > " + string);
+        }
+    }
+
+    public static void printf(String string, Object... parameters) {
+        if (loggingCallback != null) {
+            loggingCallback.printf("Network > " + string, parameters);
+        }
+    }
+
+    public static void addLoggingCallback(LoggingCallback callback) {
+        loggingCallback = callback;
+    }
+
     public void send(Transaction transaction) {
         send(transaction, null, null);
     }
@@ -101,21 +117,5 @@ public class SocketClient {
     @FunctionalInterface
     public interface FailureListener {
         void onFailure();
-    }
-
-    public static void print(String string) {
-        if (loggingCallback != null) {
-            loggingCallback.print("Network > " + string);
-        }
-    }
-
-    public static void printf(String string, Object... parameters) {
-        if (loggingCallback != null) {
-            loggingCallback.printf("Network > " + string, parameters);
-        }
-    }
-
-    public static void addLoggingCallback(LoggingCallback callback) {
-        loggingCallback = callback;
     }
 }
